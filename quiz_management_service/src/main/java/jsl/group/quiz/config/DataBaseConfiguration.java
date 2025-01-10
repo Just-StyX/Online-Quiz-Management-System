@@ -25,6 +25,7 @@ public class DataBaseConfiguration {
                 id serial primary key,
                 username varchar not null unique,
                 password varchar not null,
+                email varchar not null unique,
                 first_name varchar not null,
                 middle_name varchar,
                 last_name varchar not null,
