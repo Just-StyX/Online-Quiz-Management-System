@@ -41,8 +41,8 @@ public class DataBaseConfiguration {
 
     public static Connection getConnection() throws SQLException {
         Properties properties = new Properties();
-        properties.setProperty("password", "podsam777");
-        properties.setProperty("username", "jay7");
+        properties.setProperty("password", "");
+        properties.setProperty("username", "");
         return DriverManager.getConnection(databaseUrl, properties);
     }
 }
