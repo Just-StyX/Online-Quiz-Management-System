@@ -1,4 +1,4 @@
-package gg.jte.generated.ondemand;
+package gg.jte.generated.precompiled;
 @SuppressWarnings("unchecked")
 public final class JtehelloGenerated {
 	public static final String JTE_NAME = "hello.jte";

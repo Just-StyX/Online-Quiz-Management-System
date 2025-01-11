@@ -1,0 +1,7 @@
+@param String result
+
+<html lang="en">
+<body>
+<h1>${result}</h1>
+</body>
+</html>

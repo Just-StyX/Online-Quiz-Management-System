@@ -1,5 +1,9 @@
 package jsl.group.quiz.config;
 
+import jsl.group.quiz.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,11 +11,10 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DataBaseConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(DataBaseConfiguration.class);
     private static final String databaseUrl = "jdbc:postgresql://localhost:5432/quiz";
     private static final String tables = """
-            drop table if exists questions;
-            drop table if exists users;
-            create table questions (
+            create table if not exists questions (
                 id serial primary key,
                 question text not null,
                 answer text not null,
@@ -21,7 +24,7 @@ public class DataBaseConfiguration {
                 level varchar
             );
             
-            create table users (
+            create table if not exists users (
                 id serial primary key,
                 username varchar not null unique,
                 password varchar not null,
@@ -30,7 +33,8 @@ public class DataBaseConfiguration {
                 middle_name varchar,
                 last_name varchar not null,
                 unique_id varchar unique not null,
-                role char(5) not null
+                role char(5) not null,
+                key bytea not null
             );
             """;
 
@@ -38,6 +42,8 @@ public class DataBaseConfiguration {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate(tables);
+        connection.close();
+        log.info("Tables created successfully...");
     }
 
     public static Connection getConnection() throws SQLException {

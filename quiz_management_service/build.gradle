@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'jsl.group.quiz'
@@ -9,6 +10,12 @@ repositories {
     mavenCentral()
 }
 
+
+application {
+    mainClass = 'jsl.group.quiz.Main'
+}
+
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -17,12 +24,7 @@ dependencies {
     implementation 'io.javalin:javalin-bundle:6.4.0'
     implementation 'io.javalin:javalin-rendering:6.4.0'
     implementation 'gg.jte:jte:3.1.15'
-    implementation 'org.slf4j:slf4j-api:2.0.16'
     implementation 'org.slf4j:slf4j-simple:2.0.16'
-
-
-
-
 }
 
 test {

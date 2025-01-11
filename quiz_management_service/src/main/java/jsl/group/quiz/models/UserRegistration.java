@@ -6,8 +6,6 @@ public record UserRegistration(
         String email,
         String firstName,
         String middleName,
-        String lastName,
-        String uniqueId,
-        String role
+        String lastName
 ) {
 }
