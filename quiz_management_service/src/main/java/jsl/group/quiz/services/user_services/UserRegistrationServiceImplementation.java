@@ -71,7 +71,7 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, userLogin.email());
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 byte[] bytes = resultSet.getBytes("key");
                 SecretKey foundSecreteKey = new SecretKeySpec(bytes, "AES");
                 String encryptedPassword = resultSet.getString("password");
