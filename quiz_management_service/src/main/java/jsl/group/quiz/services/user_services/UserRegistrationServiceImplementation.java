@@ -14,6 +14,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.sql.*;
 
+import static jsl.group.quiz.utils.PasswordProcesses.passwordDecryption;
+import static jsl.group.quiz.utils.PasswordProcesses.passwordEncryption;
+
 public class UserRegistrationServiceImplementation implements UserRegistrationServices {
     static SecretKey secretKey;
     private static final Logger log = LoggerFactory.getLogger(UserRegistrationServiceImplementation.class);
@@ -35,7 +38,7 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, userRegistration.username());
-            preparedStatement.setString(2, passwordEncryption(userRegistration.password()));
+            preparedStatement.setString(2, passwordEncryption(userRegistration.password(), secretKey));
             preparedStatement.setString(3, userRegistration.email());
             preparedStatement.setString(4, userRegistration.firstName());
             preparedStatement.setString(5, userRegistration.middleName());
@@ -102,10 +105,4 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
         return false;
     }
 
-    private String passwordEncryption(String password) throws Exception {
-        return EncryptDecrypt.encrypt(password, secretKey);
-    }
-    private String passwordDecryption(String encryptedPassword, SecretKey secretKey) throws Exception {
-        return EncryptDecrypt.decrypt(encryptedPassword, secretKey);
-    }
 }
