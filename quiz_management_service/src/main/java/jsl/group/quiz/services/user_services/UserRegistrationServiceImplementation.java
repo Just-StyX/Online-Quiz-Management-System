@@ -18,20 +18,12 @@ import static jsl.group.quiz.utils.PasswordProcesses.passwordDecryption;
 import static jsl.group.quiz.utils.PasswordProcesses.passwordEncryption;
 
 public class UserRegistrationServiceImplementation implements UserRegistrationServices {
-    static SecretKey secretKey;
     private static final Logger log = LoggerFactory.getLogger(UserRegistrationServiceImplementation.class);
-
-    static {
-        try {
-            secretKey = EncryptDecrypt.generateKey();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
     @Override
-    public String register(UserRegistration userRegistration) throws SQLException {
-        Connection connection = DataBaseConfiguration.getConnection();
+    public String register(UserRegistration userRegistration) {
         try {
+            Connection connection = DataBaseConfiguration.getConnection();
+            SecretKey secretKey = EncryptDecrypt.generateKey();
             String uniqueId = userRegistration.email().split("@")[0];
             String query = """
                     insert into users (username, password, email, first_name, middle_name, last_name, unique_id, role, key) values(?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -44,7 +36,7 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
             preparedStatement.setString(5, userRegistration.middleName());
             preparedStatement.setString(6, userRegistration.lastName());
             preparedStatement.setString(7, uniqueId);
-            preparedStatement.setString(8, "USER");
+            preparedStatement.setString(8, String.valueOf(Role.USERS));
             preparedStatement.setBytes(9, secretKey.getEncoded());
             preparedStatement.executeUpdate();
 
@@ -57,14 +49,13 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return null;
+        return "";
     }
 
     @Override
-    public FoundUser login(UserLogin userLogin) throws SQLException {
-        Connection connection = DataBaseConfiguration.getConnection();
-
+    public FoundUser login(UserLogin userLogin) {
         try {
+            Connection connection = DataBaseConfiguration.getConnection();
             String query = """
                     select * from users where email = ?
                     """;
@@ -81,7 +72,8 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
                 }
                 String username = resultSet.getString("username");
                 String firstName = resultSet.getString("first_name");
-                return new FoundUser(username, firstName, Role.USER);
+                Role role = Role.valueOf(resultSet.getString("role"));
+                return new FoundUser(username, firstName, role);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -91,8 +83,8 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
 
     @Override
     public boolean nonUniniqueness(String username, String email) throws SQLException {
-        Connection connection = DataBaseConfiguration.getConnection();
         try {
+            Connection connection = DataBaseConfiguration.getConnection();
             String query = "select username, email from users where username = ? or email = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);

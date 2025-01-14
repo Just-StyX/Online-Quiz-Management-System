@@ -40,8 +40,15 @@ public class UserController {
                 form.get("password").getFirst()
         );
         FoundUser foundUser = userServices.userLogin(login);
-        String location = String.format("/user?username=%s&firstName=%s", foundUser.username(), foundUser.firstName());
-        context.sessionAttribute("role", foundUser.role());
+        Role role = foundUser.role();
+        String location = "";
+        if (role == Role.USERS) {
+            location = String.format("/user?username=%s&firstName=%s", foundUser.username(), foundUser.firstName());
+        }
+        if (role == Role.ADMIN) {
+            location = String.format("/admin?username=%s&firstName=%s", foundUser.username(), foundUser.firstName());
+        }
+        context.sessionAttribute("role", role);
         context.redirect(location);
     };
 
@@ -54,6 +61,20 @@ public class UserController {
             FoundUser foundUser = new FoundUser(queryParameters.get("username").getFirst(),
                     queryParameters.get("firstName").getFirst(), role);
             context.render("user.jte", Collections.singletonMap("foundUser", foundUser));
+        } else {
+            throw new UnauthorizedPath("authentication failure");
+        }
+    };
+
+    public static Handler renderAdminHome = context -> {
+        Map<String, List<String>> queryParameters = context.queryParamMap();
+        Map<String, Object> sessions = context.sessionAttributeMap();
+        Role role = (Role) sessions.get("role");
+        Set<RouteRole> routeRoles = context.routeRoles();
+        if (routeRoles.contains(role)) {
+            FoundUser foundUser = new FoundUser(queryParameters.get("username").getFirst(),
+                    queryParameters.get("firstName").getFirst(), role);
+            context.render("admin.jte", Collections.singletonMap("foundUser", foundUser));
         } else {
             throw new UnauthorizedPath("authentication failure");
         }
