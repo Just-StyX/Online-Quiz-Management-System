@@ -15,7 +15,7 @@ public class RenderStaticPages {
     }
     public static void renderRegistrationForm(Context context) { context.render("registration_form.jte"); }
     public static void renderLoginForm(Context context) { context.render("login.jte"); }
-    public static void renderAdminPage(Context context) { context.render("admin.jte"); }
+    public static void renderQuestionCreationForm(Context context) { context.render("question_form.jte"); }
 
     public static TemplateEngine createTemplateEngine() {
         if (isDevSystem) {

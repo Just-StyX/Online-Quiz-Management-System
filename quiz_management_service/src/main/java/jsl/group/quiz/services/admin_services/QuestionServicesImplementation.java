@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuestionServicesImplementation implements QuestionServices {
     private static final Logger log = LoggerFactory.getLogger(QuestionServicesImplementation.class);
@@ -48,12 +49,12 @@ public class QuestionServicesImplementation implements QuestionServices {
                     update questions set question = ?, answer = ?, options = ?, subject = ?, points = ?, level = ? where question_id = ?
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, question.question());
-            preparedStatement.setString(2, question.answer());
+            preparedStatement.setString(1, question.question().trim());
+            preparedStatement.setString(2, question.answer().trim());
             preparedStatement.setObject(3, question.options());
-            preparedStatement.setString(4, question.subject());
+            preparedStatement.setString(4, question.subject().trim());
             preparedStatement.setDouble(5, question.points());
-            preparedStatement.setString(6, question.level());
+            preparedStatement.setString(6, question.level().trim());
             preparedStatement.setObject(7, UUID.fromString(questionId));
 
             int affectRows = preparedStatement.executeUpdate();
@@ -73,11 +74,19 @@ public class QuestionServicesImplementation implements QuestionServices {
             preparedStatement.setObject(1, UUID.fromString(questionId));
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
+                Map<Character, String> mapOptions = new TreeMap<>();
+                String options = resultSet.getString("options");
+                if (!options.isBlank()) {
+                    Arrays.stream(options.split(",")).forEach(string -> {
+                        String[] parts = string.split("=>");
+                        mapOptions.put(parts[0].charAt(0), parts[1]);
+                    });
+                }
                 return new Question(
                         resultSet.getString("question_id"),
                         resultSet.getString("question"),
                         resultSet.getString("answer"),
-                        resultSet.getObject("options", LinkedHashMap.class),
+                        mapOptions,
                         resultSet.getString("subject"),
                         resultSet.getDouble("points"),
                         resultSet.getString("level")
@@ -95,9 +104,17 @@ public class QuestionServicesImplementation implements QuestionServices {
             List<QuizQuestion> quizQuestions = new ArrayList<>();
             List<QuizAnswer> quizAnswers = new ArrayList<>();
             while (resultSet.next()) {
+                Map<Character, String> mapOptions = new TreeMap<>();
+                String options = resultSet.getString("options");
+                if (!options.isBlank()) {
+                    Arrays.stream(options.split(",")).forEach(string -> {
+                        String[] parts = string.split("=>");
+                        mapOptions.put(parts[0].charAt(0), parts[1]);
+                    });
+                }
                 quizQuestions.add(new QuizQuestion(
                         resultSet.getString("question"),
-                        resultSet.getObject("options", LinkedHashMap.class),
+                        mapOptions,
                         resultSet.getDouble("points"),
                         resultSet.getString("question_id")
                 ));
@@ -152,6 +169,40 @@ public class QuestionServicesImplementation implements QuestionServices {
         }
         return "";
     }
+
+    @Override
+    public Map<String, String> findQuestionByQuestion(String question) {
+        try {
+            Connection connection = DataBaseConfiguration.getConnection();
+            String query = """
+                    select * from questions where question = ?
+                    """;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, question.trim());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Map<String, String> mapOptions = new TreeMap<>();
+
+                // TODO: change these replacements as they are causing trailing ';'
+                String options = resultSet.getString("options").replace("\"", "")
+                        .replace("=>", "=").replace(", ", ";");
+
+                mapOptions.put("questionId", resultSet.getString("question_id"));
+                mapOptions.put("question", resultSet.getString("question"));
+                mapOptions.put("answer", resultSet.getString("answer"));
+                mapOptions.put("options", options);
+                mapOptions.put("subject", resultSet.getString("subject"));
+                mapOptions.put("points", String.valueOf(resultSet.getDouble("points")));
+                mapOptions.put("level", resultSet.getString("level"));
+                return mapOptions;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     private ResultSet getResultSet(String subject, String level, int limit) throws SQLException {
         Connection connection = DataBaseConfiguration.getConnection();
         String query = """

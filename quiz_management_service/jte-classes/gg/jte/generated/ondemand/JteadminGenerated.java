@@ -10,7 +10,7 @@ public final class JteadminGenerated {
 		jteOutput.writeContent(" ");
 		jteOutput.setContext("h1", null);
 		jteOutput.writeUserContent(foundUser.firstName());
-		jteOutput.writeContent("</h1>\n        <div>\n            <button type=\"button\"> <a href=\"/admin/question\"> Create Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/updates\"> Update Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/quest\"> Get Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/remove\"> Create Question </a> </button>\n        </div>\n    </body>\n</html>");
+		jteOutput.writeContent("</h1>\n        <div>\n            <button type=\"button\"> <a href=\"/admin/question\"> Create Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/updates\"> Update Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/quest\"> Get Question </a> </button>\n            <button type=\"button\"> <a href=\"/admin/question/remove\"> Delete Question </a> </button>\n        </div>\n    </body>\n</html>");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
 		jsl.group.quiz.models.FoundUser foundUser = (jsl.group.quiz.models.FoundUser)params.get("foundUser");

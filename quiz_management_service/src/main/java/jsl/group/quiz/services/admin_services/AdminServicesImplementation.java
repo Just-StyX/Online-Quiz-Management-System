@@ -5,6 +5,7 @@ import jsl.group.quiz.models.Quiz;
 import jsl.group.quiz.utils.exceptions.ValidationException;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class AdminServicesImplementation implements AdminServices{
     private final QuestionServices questionServices = new QuestionServicesImplementation();
@@ -40,13 +41,17 @@ public class AdminServicesImplementation implements AdminServices{
         return questionServices.deleteQuestionById(questionId);
     }
 
+    @Override
+    public Map<String, String> findQuestionByQuestion(String question) {
+        return questionServices.findQuestionByQuestion(question);
+    }
+
     private boolean validate(Question question) {
         return (
                 question.question().isEmpty() ||
                         question.answer().isEmpty() ||
                         question.level().isEmpty() ||
-                        question.subject().isEmpty() ||
-                        question.options() == null
+                        question.subject().isEmpty()
                 );
     }
 }
