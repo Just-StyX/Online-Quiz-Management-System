@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static jsl.group.quiz.utils.DataUtilities.emptyData;
+import static jsl.group.quiz.utils.DataUtilities.getQuestionLocation;
 import static jsl.group.quiz.utils.RoutesAuthorization.isAdmin;
 import static jsl.group.quiz.utils.RoutesAuthorization.isUserOrAdmin;
 
@@ -38,8 +40,22 @@ public class AdminController {
                     Double.parseDouble(form.get("points").getFirst()),
                     form.get("level").getFirst()
             );
-            String result = adminServices.createQuestion(question);
-            context.json(result);
+            String result = "Question created for " + adminServices.createQuestion(question);
+            String location = String.format("/admin/question?created=%s", result);
+            context.redirect(location);
+        } else {
+            throw new UnauthorizedPath("access denied");
+        }
+    };
+
+    public static Handler renderQuestionCreationForm = context -> {
+        if (isAdmin(context)) {
+            String created = context.queryParam("created");
+            if (created != null && !created.isBlank()) {
+                context.render("question_form.jte", Map.of("createdBool", true, "created", created));
+            } else {
+                context.render("question_form.jte", Map.of("createdBool", false, "created", ""));
+            }
         } else {
             throw new UnauthorizedPath("access denied");
         }
@@ -67,7 +83,9 @@ public class AdminController {
                     form.get("level").getFirst().trim()
             );
             String result = adminServices.updateQuestionById(questionId, question);
-            context.json(result);
+            Map<String, String> emptyData = emptyData();
+            String location = getQuestionLocation(emptyData, false, result, true);
+            context.redirect(location);
         } else {
             throw new UnauthorizedPath("access denied");
         }
@@ -87,7 +105,9 @@ public class AdminController {
         if (isAdmin(context)) {
             String questionId = context.queryParam("id");
             String result = adminServices.deleteQuestionById(questionId);
-            context.json(result);
+            Map<String, String> emptyData = emptyData();
+            String location = getQuestionLocation(emptyData, false, result, true);
+            context.redirect(location);
         } else {
             throw new UnauthorizedPath("access denied");
         }
@@ -123,7 +143,8 @@ public class AdminController {
             Map<String, List<String>> parameters = context.queryParamMap();
             if (parameters.isEmpty()){
                 Question question = new Question("", "", "", null, "", 0.0, "");
-                context.render("edit_question_form.jte", Map.of("show", false, "question", question));
+                context.render("edit_question_form.jte", Map.of("show", false, "question", question,
+                        "message", " ", "messageBool", false));
             } else {
                 Map<Character, String> mapOptions = new TreeMap<>();
                 String foundOptions = parameters.get("options").getFirst();
@@ -133,6 +154,8 @@ public class AdminController {
                         mapOptions.put(parts[0].charAt(0), parts[1]);
                     });
                 }
+                boolean messageBool = Boolean.parseBoolean(parameters.get("messageBool").getFirst());
+                String message = parameters.get("message").getFirst();
                 Question question = new Question(
                         parameters.get("questionId").getFirst(),
                         parameters.get("question").getFirst(),
@@ -142,7 +165,13 @@ public class AdminController {
                         Double.parseDouble(parameters.get("points").getFirst()),
                         parameters.get("level").getFirst()
                 );
-                context.render("edit_question_form.jte", Map.of("show", true, "question", question));
+                if (messageBool) {
+                    context.render("edit_question_form.jte", Map.of("show", false, "question", question,
+                            "message", message, "messageBool", true));
+                } else {
+                    context.render("edit_question_form.jte", Map.of("show", true, "question", question,
+                            "message", " ", "messageBool", false));
+                }
             }
         }
     };
@@ -151,9 +180,7 @@ public class AdminController {
         if (isAdmin(context)) {
             String searchQuestion = context.formParamMap().get("search-question").getFirst();
             Map<String, String> question = adminServices.findQuestionByQuestion(searchQuestion);
-            String location = String.format("/admin/question/updates?questionId=%s&question=%s&answer=%s&options=%s&subject=%s&points=%s&level=%s&show=%s",
-                    question.get("questionId"), question.get("question"), question.get("answer"), question.get("options"),
-                    question.get("subject"), question.get("points"), question.get("level"), true);
+            String location = getQuestionLocation(question, true, "", false);
             context.redirect(location);
         }
     };

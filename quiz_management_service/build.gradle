@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 group = 'jsl.group.quiz'
@@ -25,6 +26,12 @@ dependencies {
     implementation 'io.javalin:javalin-rendering:6.4.0'
     implementation 'gg.jte:jte:3.1.15'
     implementation 'org.slf4j:slf4j-simple:2.0.16'
+}
+
+shadowJar {
+    archiveBaseName.set("app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
 }
 
 test {

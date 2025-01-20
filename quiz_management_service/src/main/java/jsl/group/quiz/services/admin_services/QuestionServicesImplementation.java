@@ -5,13 +5,13 @@ import jsl.group.quiz.models.Question;
 import jsl.group.quiz.models.Quiz;
 import jsl.group.quiz.models.QuizAnswer;
 import jsl.group.quiz.models.QuizQuestion;
+import jsl.group.quiz.utils.DataUtilities;
 import jsl.group.quiz.utils.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class QuestionServicesImplementation implements QuestionServices {
     private static final Logger log = LoggerFactory.getLogger(QuestionServicesImplementation.class);
@@ -59,6 +59,7 @@ public class QuestionServicesImplementation implements QuestionServices {
 
             int affectRows = preparedStatement.executeUpdate();
             if (affectRows == 1) return "Updated question with id " + questionId + " successfully";
+            else return "Number of rows updated is 0";
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -157,13 +158,14 @@ public class QuestionServicesImplementation implements QuestionServices {
         try {
             Connection connection = DataBaseConfiguration.getConnection();
             String query = """
-                    delete * from questions where question_id = ?
+                    delete from questions where question_id = ?
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, questionId);
+            preparedStatement.setObject(1, UUID.fromString(questionId));
 
             int affectRows = preparedStatement.executeUpdate();
             if (affectRows == 1) return "Deleted question with id " + questionId + " successfully";
+            else return "Number of rows deleted is 0";
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -196,11 +198,12 @@ public class QuestionServicesImplementation implements QuestionServices {
                 mapOptions.put("points", String.valueOf(resultSet.getDouble("points")));
                 mapOptions.put("level", resultSet.getString("level"));
                 return mapOptions;
+            } else {
+                return DataUtilities.emptyData();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     private ResultSet getResultSet(String subject, String level, int limit) throws SQLException {

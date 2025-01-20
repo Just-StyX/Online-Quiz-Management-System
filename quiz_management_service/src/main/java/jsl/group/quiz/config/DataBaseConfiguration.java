@@ -14,11 +14,10 @@ import static jsl.group.quiz.utils.PasswordProcesses.passwordEncryption;
 
 public class DataBaseConfiguration {
     private static final Logger log = LoggerFactory.getLogger(DataBaseConfiguration.class);
-//    private static final String databaseUrl = "jdbc:postgresql://localhost:5432/quiz";
     private static final String tables = """
             create table if not exists questions (
                 question_id uuid primary key default gen_random_uuid(),
-                question text not null,
+                question text not null unique,
                 answer text not null,
                 options text,
                 subject varchar not null,

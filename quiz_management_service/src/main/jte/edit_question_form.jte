@@ -1,4 +1,6 @@
 @param boolean show
+@param String message
+@param boolean messageBool
 @param jsl.group.quiz.models.Question question
 
 <html lang="en">
@@ -14,6 +16,11 @@
         </label>
         <button type="submit">Search Question</button>
     </form>
+    @if(messageBool)
+        <div>
+            <h4>${message}</h4>
+        </div>
+    @endif
     @if(show)
         <div>
             <form action="/admin/question/updates?id=${question.questionId()}" method="post">
@@ -53,9 +60,18 @@
                     </textarea>
                 </div>
 
-                <button type="submit">Edit Question</button>
+                @if(!question.questionId().isEmpty())
+                    <button type="submit">Edit Question</button>
+                @endif
             </form>
         </div>
+        @if(!question.questionId().isEmpty())
+            <div>
+                <h3>Completely Delete Question</h3>
+                    <button type="button"> <a href="/admin/question/remove?id=${question.questionId()}"> Delete Question </a> </button>
+            </div>
+        @endif
     @endif
+    <button type="button"> <a href="/admin"> Back </a> </button>
 </body>
 </html>

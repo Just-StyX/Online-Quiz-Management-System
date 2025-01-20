@@ -2,9 +2,16 @@ package gg.jte.generated.ondemand;
 @SuppressWarnings("unchecked")
 public final class Jteedit_question_formGenerated {
 	public static final String JTE_NAME = "edit_question_form.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,16,16,16,18,18,18,18,22,22,22,26,26,26,34,35,35,35,42,42,42,42,42,42,42,42,42,46,46,46,46,46,46,46,46,46,51,51,51,58,58,60,60,60,0,1,1,1,1};
-	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean show, jsl.group.quiz.models.Question question) {
+	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,18,18,18,20,20,20,22,22,23,23,25,25,25,25,29,29,29,33,33,33,41,42,42,42,49,49,49,49,49,49,49,49,49,53,53,53,53,53,53,53,53,53,58,58,58,62,62,64,64,67,67,70,70,70,70,72,72,73,73,76,76,76,0,1,2,3,3,3,3};
+	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean show, String message, boolean messageBool, jsl.group.quiz.models.Question question) {
 		jteOutput.writeContent("\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Question Form</title>\n</head>\n<body>\n    <form action=\"/admin/question/search\" method=\"post\">\n        <label for=\"search-question\">\n            <textarea id=\"search-question\" name=\"search-question\" rows=\"3\" cols=\"50\" >Enter question fully</textarea>\n        </label>\n        <button type=\"submit\">Search Question</button>\n    </form>\n    ");
+		if (messageBool) {
+			jteOutput.writeContent("\n        <div>\n            <h4>");
+			jteOutput.setContext("h4", null);
+			jteOutput.writeUserContent(message);
+			jteOutput.writeContent("</h4>\n        </div>\n    ");
+		}
+		jteOutput.writeContent("\n    ");
 		if (show) {
 			jteOutput.writeContent("\n        <div>\n            <form action=\"/admin/question/updates?id=");
 			jteOutput.setContext("form", "action");
@@ -41,13 +48,27 @@ public final class Jteedit_question_formGenerated {
 			jteOutput.writeContent(">\n                </div>\n                <div>\n                    <label for=\"level\">Level:</label>\n                    <textarea id=\"level\" name=\"level\" rows=\"2\" cols=\"30\" placeholder=\"Example: easy, medium, hard\">\n                        ");
 			jteOutput.setContext("textarea", null);
 			jteOutput.writeUserContent(question.level());
-			jteOutput.writeContent("\n                    </textarea>\n                </div>\n\n                <button type=\"submit\">Edit Question</button>\n            </form>\n        </div>\n    ");
+			jteOutput.writeContent("\n                    </textarea>\n                </div>\n\n                ");
+			if (!question.questionId().isEmpty()) {
+				jteOutput.writeContent("\n                    <button type=\"submit\">Edit Question</button>\n                ");
+			}
+			jteOutput.writeContent("\n            </form>\n        </div>\n        ");
+			if (!question.questionId().isEmpty()) {
+				jteOutput.writeContent("\n            <div>\n                <h3>Completely Delete Question</h3>\n                    <button type=\"button\"> <a href=\"/admin/question/remove?id=");
+				jteOutput.setContext("a", "href");
+				jteOutput.writeUserContent(question.questionId());
+				jteOutput.setContext("a", null);
+				jteOutput.writeContent("\"> Delete Question </a> </button>\n            </div>\n        ");
+			}
+			jteOutput.writeContent("\n    ");
 		}
-		jteOutput.writeContent("\n</body>\n</html>");
+		jteOutput.writeContent("\n    <button type=\"button\"> <a href=\"/admin\"> Back </a> </button>\n</body>\n</html>");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
 		boolean show = (boolean)params.get("show");
+		String message = (String)params.get("message");
+		boolean messageBool = (boolean)params.get("messageBool");
 		jsl.group.quiz.models.Question question = (jsl.group.quiz.models.Question)params.get("question");
-		render(jteOutput, jteHtmlInterceptor, show, question);
+		render(jteOutput, jteHtmlInterceptor, show, message, messageBool, question);
 	}
 }
