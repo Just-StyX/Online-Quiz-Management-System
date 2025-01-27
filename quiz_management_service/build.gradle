@@ -11,6 +11,12 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
+}
+
 
 application {
     mainClass = 'jsl.group.quiz.Main'
@@ -22,10 +28,13 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
     implementation 'org.postgresql:postgresql:42.7.4'
-    implementation 'io.javalin:javalin-bundle:6.4.0'
+//    implementation 'io.javalin:javalin-bundle:6.4.0'
     implementation 'io.javalin:javalin-rendering:6.4.0'
     implementation 'gg.jte:jte:3.1.15'
     implementation 'org.slf4j:slf4j-simple:2.0.16'
+    implementation 'io.javalin:javalin:6.4.0'
+
+
 }
 
 shadowJar {

@@ -9,5 +9,5 @@ import java.sql.SQLException;
 public interface UserRegistrationServices {
     String register(UserRegistration userRegistration) throws SQLException;
     FoundUser login(UserLogin userLogin) throws SQLException;
-    boolean nonUniniqueness(String username, String email) throws SQLException;
+    boolean nonUniqueness(String username, String email) throws SQLException;
 }

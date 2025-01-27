@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class UserController {
-    private static final UserServices userServices = new UserServicesImplementation();
+    private static final UserServices userServices = UserServicesImplementation.getInstance();
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public static Handler registerUser = context -> {

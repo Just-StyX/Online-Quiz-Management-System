@@ -1,4 +1,4 @@
-package jsl.group.quiz.config;
+package jsl.group.quiz.singletons;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ public enum DatabaseConnection {
     INSTANCE;
 
     private Connection connection;
-    private DatabaseConnection() {
+    DatabaseConnection() {
         try {
             Properties properties = new Properties();
             properties.setProperty("password", "");

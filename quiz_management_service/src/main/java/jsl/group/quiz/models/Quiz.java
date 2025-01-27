@@ -1,6 +1,8 @@
 package jsl.group.quiz.models;
 
+import jsl.group.quiz.utils.structures.PositionalLinkedList;
+
 import java.util.List;
 
-public record Quiz(List<QuizQuestion> quizQuestions, List<QuizAnswer> quizAnswers) {
+public record Quiz(PositionalLinkedList<QuizQuestion> quizQuestions, List<QuizAnswer> quizAnswers) {
 }

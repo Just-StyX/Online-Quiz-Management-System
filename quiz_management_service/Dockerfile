@@ -3,6 +3,6 @@ WORKDIR /app
 
 COPY build/libs/*.jar /app.jar
 
-EXPOSE 7000
+EXPOSE 8080
 
 CMD ["java", "-jar", "/app.jar"]

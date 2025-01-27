@@ -82,7 +82,7 @@ public class UserRegistrationServiceImplementation implements UserRegistrationSe
     }
 
     @Override
-    public boolean nonUniniqueness(String username, String email) throws SQLException {
+    public boolean nonUniqueness(String username, String email) throws SQLException {
         try {
             Connection connection = DataBaseConfiguration.getConnection();
             String query = "select username, email from users where username = ? or email = ?";

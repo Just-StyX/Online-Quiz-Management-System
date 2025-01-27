@@ -3,18 +3,23 @@ package jsl.group.quiz.services.user_services;
 import jsl.group.quiz.models.FoundUser;
 import jsl.group.quiz.models.UserLogin;
 import jsl.group.quiz.models.UserRegistration;
+import jsl.group.quiz.singletons.SingleUserRegistration;
 import jsl.group.quiz.utils.exceptions.UniquenessException;
 import jsl.group.quiz.utils.exceptions.ValidationException;
 
 import java.sql.SQLException;
 
 public class UserServicesImplementation implements UserServices {
-    UserRegistrationServices userRegistrationServices = new UserRegistrationServiceImplementation();
+    private final UserRegistrationServices userRegistrationServices = SingleUserRegistration.INSTANCE.getInstance();
+    private UserServicesImplementation() {}
+    public static UserServicesImplementation getInstance() {
+        return new UserServicesImplementation();
+    }
     @Override
     public String userRegistration(UserRegistration userRegistration) throws SQLException {
         if (validate(userRegistration)) throw new ValidationException("Fields cannot be empty");
         if (userRegistration.password().length() < 8) throw new ValidationException("Password must be at least characters");
-        if (userRegistrationServices.nonUniniqueness(userRegistration.username(), userRegistration.email())) {
+        if (userRegistrationServices.nonUniqueness(userRegistration.username(), userRegistration.email())) {
             throw new UniquenessException("Username or Email is not available");
         }
         return userRegistrationServices.register(userRegistration);

@@ -1,6 +1,6 @@
 package jsl.group.quiz.config;
 
-import jsl.group.quiz.Main;
+import jsl.group.quiz.singletons.DatabaseConnection;
 import jsl.group.quiz.utils.EncryptDecrypt;
 import jsl.group.quiz.utils.Role;
 import org.slf4j.Logger;
@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import java.sql.*;
-import java.util.Properties;
 
 import static jsl.group.quiz.utils.PasswordProcesses.passwordEncryption;
 

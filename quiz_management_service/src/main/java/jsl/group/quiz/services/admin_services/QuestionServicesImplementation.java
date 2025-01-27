@@ -7,6 +7,8 @@ import jsl.group.quiz.models.QuizAnswer;
 import jsl.group.quiz.models.QuizQuestion;
 import jsl.group.quiz.utils.DataUtilities;
 import jsl.group.quiz.utils.Level;
+import jsl.group.quiz.utils.structures.Position;
+import jsl.group.quiz.utils.structures.PositionalLinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,18 +104,18 @@ public class QuestionServicesImplementation implements QuestionServices {
     public Quiz findQuestions(String subject, String level, int limit) {
         try {
             ResultSet resultSet = getResultSet(subject, level, limit);
-            List<QuizQuestion> quizQuestions = new ArrayList<>();
+            PositionalLinkedList<QuizQuestion> quizQuestions = PositionalLinkedList.getInstance();
             List<QuizAnswer> quizAnswers = new ArrayList<>();
             while (resultSet.next()) {
                 Map<Character, String> mapOptions = new TreeMap<>();
-                String options = resultSet.getString("options");
+                String options = resultSet.getString("options").replace("\"", "");
                 if (!options.isBlank()) {
-                    Arrays.stream(options.split(",")).forEach(string -> {
+                    Arrays.stream(options.split(", ")).forEach(string -> {
                         String[] parts = string.split("=>");
                         mapOptions.put(parts[0].charAt(0), parts[1]);
                     });
                 }
-                quizQuestions.add(new QuizQuestion(
+                quizQuestions.addLast(new QuizQuestion(
                         resultSet.getString("question"),
                         mapOptions,
                         resultSet.getDouble("points"),
@@ -129,7 +131,7 @@ public class QuestionServicesImplementation implements QuestionServices {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        return new Quiz(List.of(), List.of());
+        return new Quiz(PositionalLinkedList.getInstance(), List.of());
     }
     @Override
     public Quiz quizQuestions(String subject, int limit) {
@@ -141,12 +143,17 @@ public class QuestionServicesImplementation implements QuestionServices {
         Quiz hard = findQuestions(subject, Level.HARD.getLevel(), levelLimits);
         Quiz medium = findQuestions(subject, Level.MEDIUM.getLevel(), levelLimits + difference);
         Quiz easy = findQuestions(subject, Level.EASY.getLevel(), levelLimits);
-        List<QuizQuestion> quizQuestions = new ArrayList<>();
+//        List<QuizQuestion> quizQuestions = new ArrayList<>();
+        PositionalLinkedList<QuizQuestion> quizQuestions = PositionalLinkedList.getInstance();
+        for (Position<QuizQuestion> position: easy.quizQuestions()) quizQuestions.addFirst(position.getElement());
+        for (Position<QuizQuestion> position: medium.quizQuestions()) quizQuestions.addFirst(position.getElement());
+        for (Position<QuizQuestion> position: hard.quizQuestions()) quizQuestions.addFirst(position.getElement());
         List<QuizAnswer> quizAnswers = new ArrayList<>();
-        quizQuestions.addAll(easy.quizQuestions());
-        quizQuestions.addAll(medium.quizQuestions());
-        quizQuestions.addAll(hard.quizQuestions());
-        Collections.shuffle(quizQuestions);
+//        quizQuestions.addAll(easy.quizQuestions());
+//        quizQuestions.addAll(medium.quizQuestions());
+//        quizQuestions.addAll(hard.quizQuestions());
+//        Collections.shuffle(quizQuestions);
+//        quizQuestions.shuffle();
         quizAnswers.addAll(easy.quizAnswers());
         quizAnswers.addAll(medium.quizAnswers());
         quizAnswers.addAll(hard.quizAnswers());
