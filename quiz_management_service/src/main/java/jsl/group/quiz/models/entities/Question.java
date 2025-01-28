@@ -1,4 +1,4 @@
-package jsl.group.quiz.models;
+package jsl.group.quiz.models.entities;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-@param jsl.group.quiz.models.FoundUser foundUser
+@param jsl.group.quiz.models.entities.FoundUser foundUser
 
 <html lang="en">
     <body>

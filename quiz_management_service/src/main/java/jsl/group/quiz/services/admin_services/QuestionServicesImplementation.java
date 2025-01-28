@@ -1,10 +1,10 @@
 package jsl.group.quiz.services.admin_services;
 
 import jsl.group.quiz.config.DataBaseConfiguration;
-import jsl.group.quiz.models.Question;
-import jsl.group.quiz.models.Quiz;
-import jsl.group.quiz.models.QuizAnswer;
-import jsl.group.quiz.models.QuizQuestion;
+import jsl.group.quiz.models.entities.Question;
+import jsl.group.quiz.models.entities.Quiz;
+import jsl.group.quiz.models.entities.QuizAnswer;
+import jsl.group.quiz.models.entities.QuizQuestion;
 import jsl.group.quiz.utils.DataUtilities;
 import jsl.group.quiz.utils.Level;
 import jsl.group.quiz.utils.structures.Position;
@@ -124,7 +124,9 @@ public class QuestionServicesImplementation implements QuestionServices {
                 quizAnswers.add(new QuizAnswer(
                         resultSet.getString("question_id"),
                         resultSet.getString("answer"),
-                        resultSet.getString("level")
+                        resultSet.getString("level"),
+                        resultSet.getDouble("points"),
+                        resultSet.getString("subject")
                 ));
             }
             return new Quiz(quizQuestions, quizAnswers);
@@ -143,17 +145,11 @@ public class QuestionServicesImplementation implements QuestionServices {
         Quiz hard = findQuestions(subject, Level.HARD.getLevel(), levelLimits);
         Quiz medium = findQuestions(subject, Level.MEDIUM.getLevel(), levelLimits + difference);
         Quiz easy = findQuestions(subject, Level.EASY.getLevel(), levelLimits);
-//        List<QuizQuestion> quizQuestions = new ArrayList<>();
         PositionalLinkedList<QuizQuestion> quizQuestions = PositionalLinkedList.getInstance();
         for (Position<QuizQuestion> position: easy.quizQuestions()) quizQuestions.addFirst(position.getElement());
         for (Position<QuizQuestion> position: medium.quizQuestions()) quizQuestions.addFirst(position.getElement());
         for (Position<QuizQuestion> position: hard.quizQuestions()) quizQuestions.addFirst(position.getElement());
         List<QuizAnswer> quizAnswers = new ArrayList<>();
-//        quizQuestions.addAll(easy.quizQuestions());
-//        quizQuestions.addAll(medium.quizQuestions());
-//        quizQuestions.addAll(hard.quizQuestions());
-//        Collections.shuffle(quizQuestions);
-//        quizQuestions.shuffle();
         quizAnswers.addAll(easy.quizAnswers());
         quizAnswers.addAll(medium.quizAnswers());
         quizAnswers.addAll(hard.quizAnswers());

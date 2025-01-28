@@ -1,8 +1,8 @@
 package jsl.group.quiz.services.user_services;
 
-import jsl.group.quiz.models.FoundUser;
-import jsl.group.quiz.models.UserLogin;
-import jsl.group.quiz.models.UserRegistration;
+import jsl.group.quiz.models.entities.FoundUser;
+import jsl.group.quiz.models.entities.UserLogin;
+import jsl.group.quiz.models.entities.UserRegistration;
 
 import java.sql.SQLException;
 

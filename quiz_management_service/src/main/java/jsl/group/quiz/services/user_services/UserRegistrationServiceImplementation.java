@@ -1,9 +1,9 @@
 package jsl.group.quiz.services.user_services;
 
 import jsl.group.quiz.config.DataBaseConfiguration;
-import jsl.group.quiz.models.FoundUser;
-import jsl.group.quiz.models.UserLogin;
-import jsl.group.quiz.models.UserRegistration;
+import jsl.group.quiz.models.entities.FoundUser;
+import jsl.group.quiz.models.entities.UserLogin;
+import jsl.group.quiz.models.entities.UserRegistration;
 import jsl.group.quiz.utils.EncryptDecrypt;
 import jsl.group.quiz.utils.Role;
 import jsl.group.quiz.utils.exceptions.UserNotFoundException;

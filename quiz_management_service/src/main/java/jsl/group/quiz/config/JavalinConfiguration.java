@@ -41,6 +41,7 @@ public class JavalinConfiguration {
                 .get("/quiz/question/quest", QuizController.getQuestionById, Role.ADMIN, Role.USERS)
                 .get("/quiz/question/practice", QuizController.getPracticeQuestions, Role.USERS, Role.ADMIN)
                 .get("/quiz/question/quiz", QuizController.quizQuestions, Role.USERS, Role.ADMIN)
+                .get("/quiz/question/end", QuizController.endQuiz, Role.USERS, Role.ADMIN)
 
                 // authorizations
                 .before("/admin", context -> {

@@ -1,5 +1,6 @@
-@param jsl.group.quiz.models.QuizQuestion question
+@param jsl.group.quiz.models.entities.QuizQuestion question
 @param java.util.Map<String, Character> map = new java.util.HashMap<>()
+@param java.util.Map<String, Character> answerMap = new java.util.HashMap<>()
 @param boolean first
 @param boolean last
 
@@ -10,7 +11,8 @@
         <div>
             @for(java.util.Map.Entry<Character, String> entry : question.options().entrySet())
                 <ul style="list-style-type: none;">
-                    <li><button value="${entry.getKey()}" onclick="'${map.put(question.questionId(), entry.getKey())}'">${entry.getKey()}</button> <span>${entry.getValue()}</span></li>
+                    <li><button > <a href="/quiz/question/quiz?id=${question.questionId()}&choice=${entry.getKey()}&first=${first}&last=${last}">
+                                ${entry.getKey()}</a> </button> <span>${entry.getValue()}</span></li>
                 </ul>
             @endfor
         </div>

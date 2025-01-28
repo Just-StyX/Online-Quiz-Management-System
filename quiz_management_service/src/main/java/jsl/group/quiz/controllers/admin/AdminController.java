@@ -1,7 +1,7 @@
 package jsl.group.quiz.controllers.admin;
 
 import io.javalin.http.Handler;
-import jsl.group.quiz.models.Question;
+import jsl.group.quiz.models.entities.Question;
 import jsl.group.quiz.services.admin_services.AdminServices;
 import jsl.group.quiz.services.admin_services.AdminServicesImplementation;
 import jsl.group.quiz.utils.exceptions.UnauthorizedPath;

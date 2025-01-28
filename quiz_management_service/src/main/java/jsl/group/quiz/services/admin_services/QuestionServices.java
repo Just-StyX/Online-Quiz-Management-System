@@ -1,7 +1,7 @@
 package jsl.group.quiz.services.admin_services;
 
-import jsl.group.quiz.models.Question;
-import jsl.group.quiz.models.Quiz;
+import jsl.group.quiz.models.entities.Question;
+import jsl.group.quiz.models.entities.Quiz;
 
 import java.sql.SQLException;
 import java.util.Map;

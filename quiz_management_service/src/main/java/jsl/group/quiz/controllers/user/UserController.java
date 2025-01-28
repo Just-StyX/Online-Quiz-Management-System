@@ -2,9 +2,9 @@ package jsl.group.quiz.controllers.user;
 
 import io.javalin.http.Handler;
 import io.javalin.security.RouteRole;
-import jsl.group.quiz.models.FoundUser;
-import jsl.group.quiz.models.UserLogin;
-import jsl.group.quiz.models.UserRegistration;
+import jsl.group.quiz.models.entities.FoundUser;
+import jsl.group.quiz.models.entities.UserLogin;
+import jsl.group.quiz.models.entities.UserRegistration;
 import jsl.group.quiz.services.user_services.UserServices;
 import jsl.group.quiz.services.user_services.UserServicesImplementation;
 import jsl.group.quiz.utils.Role;

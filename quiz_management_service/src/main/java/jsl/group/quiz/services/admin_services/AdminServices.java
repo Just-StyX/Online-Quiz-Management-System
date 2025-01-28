@@ -1,9 +1,9 @@
 package jsl.group.quiz.services.admin_services;
 
-import jsl.group.quiz.models.FoundUser;
-import jsl.group.quiz.models.Question;
-import jsl.group.quiz.models.Quiz;
-import jsl.group.quiz.models.UserLogin;
+import jsl.group.quiz.models.entities.FoundUser;
+import jsl.group.quiz.models.entities.Question;
+import jsl.group.quiz.models.entities.Quiz;
+import jsl.group.quiz.models.entities.UserLogin;
 
 import java.sql.SQLException;
 import java.util.List;

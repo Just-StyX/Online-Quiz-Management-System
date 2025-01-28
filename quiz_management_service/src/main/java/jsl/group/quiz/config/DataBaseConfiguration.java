@@ -17,7 +17,7 @@ public class DataBaseConfiguration {
             create table if not exists questions (
                 question_id uuid primary key default gen_random_uuid(),
                 question text not null unique,
-                answer text not null,
+                answer varchar(7) not null,
                 options text,
                 subject varchar not null,
                 points float not null,
@@ -35,6 +35,19 @@ public class DataBaseConfiguration {
                 unique_id varchar unique not null,
                 role char(5) not null,
                 key bytea not null
+            );
+            
+            create table if not exists revision (
+                id serial primary key,
+                username varchar not null,
+                question_id varchar not null
+            );
+            
+            create table if not exists scores (
+                id serial primary key,
+                username varchar not null,
+                subject varchar not null,
+                score float not null
             );
             """;
 

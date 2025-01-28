@@ -1,7 +1,7 @@
 @param boolean show
 @param String message
 @param boolean messageBool
-@param jsl.group.quiz.models.Question question
+@param jsl.group.quiz.models.entities.Question question
 
 <html lang="en">
 <head>
@@ -31,7 +31,8 @@
                 </div>
                 <div>
                     <label for="answer">Answer:</label>
-                    <textarea id="answer" name="answer" rows="2" cols="30">${question.answer()}</textarea>
+                    <input id="answer" name="answer" placeholder="A;B;C" value="${question.answer()}"/>
+<%--                    <textarea id="answer" name="answer" rows="2" cols="30">${question.answer()}</textarea>--%>
                 </div>
 
                 <h3>Section Options</h3>
